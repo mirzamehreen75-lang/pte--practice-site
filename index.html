@@ -1,150 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>PTE Practice Pro</title>
-  <style>
-    body {
-      font-family: Arial;
-      padding: 20px;
-      background: #f4f4f4;
-      text-align: center;
-    }
-    .card {
-      background: white;
-      padding: 20px;
-      margin: 20px auto;
-      width: 60%;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    button {
-      padding: 10px 20px;
-      margin: 10px;
-      cursor: pointer;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>PTE Practice Mock Test</title>
+<style>
+body {
+  font-family: Arial;
+  background: #f4f6f8;
+  text-align: center;
+}
+.container {
+  width: 80%;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  background: #007bff;
+  color: white;
+}
+.timer {
+  font-size: 20px;
+  color: red;
+}
+.question {
+  margin: 20px 0;
+}
+</style>
 </head>
+
 <body>
 
-<h1>PTE Mock Test Practice</h1>
+<div class="container">
+  <h1>PTE Mock Test</h1>
+  <div class="timer" id="timer">Time: 60</div>
 
-<div class="card">
-  <h2>⏱ Timer: <span id="timer">60</span> sec</h2>
-</div>
+  <div id="quiz"></div>
 
-<div class="card">
-  <h2>🎤 Speaking Practice</h2>
-  <p>Technology is transforming the world at a rapid pace.</p>
-  <button onclick="startRecording()">Start Recording</button>
-  <button onclick="stopRecording()">Stop</button>
-  <br><br>
-  <audio id="audio" controls></audio>
-</div>
+  <button onclick="submitTest()">Submit</button>
 
-<div class="card">
-  <h2>Multiple Choice</h2>
-  <p id="question"></p>
-  <button onclick="answer(0)" id="opt0"></button>
-  <button onclick="answer(1)" id="opt1"></button>
-</div>
-
-<div class="card">
-  <h2>Score: <span id="score">0</span></h2>
+  <h2 id="result"></h2>
 </div>
 
 <script>
-let score = 0;
-
-// QUESTIONS
-let questions = [
-  { q: "Choose synonym of 'rapid'", options: ["Fast", "Slow"], correct: 0 },
-  { q: "Choose synonym of 'happy'", options: ["Sad", "Joyful"], correct: 1 },
-  { q: "Choose synonym of 'big'", options: ["Large", "Tiny"], correct: 0 }
-];
-
-let current = 0;
-
-// LOAD QUESTION
-function loadQuestion() {
-  document.getElementById("question").innerText = questions[current].q;
-  document.getElementById("opt0").innerText = questions[current].options[0];
-  document.getElementById("opt1").innerText = questions[current].options[1];
-}
-
-// ANSWER
-function answer(i) {
-  if (i === questions[current].correct) {
-    alert("Correct!");
-    score++;
-  } else {
-    alert("Wrong!");
-  }
-
-  updateScore();
-  current++;
-
-  if (current < questions.length) {
-    loadQuestion();
-  } else {
-    alert("Test finished!");
-  }
-}
-
-// SCORE
-function updateScore() {
-  document.getElementById("score").innerText = score;
-}
-
-// TIMER
-let timeLeft = 60;
+let time = 60;
 let timer = setInterval(() => {
-  timeLeft--;
-  document.getElementById("timer").innerText = timeLeft;
-
-  if (timeLeft <= 0) {
+  time--;
+  document.getElementById("timer").innerText = "Time: " + time;
+  if (time <= 0) {
     clearInterval(timer);
-    alert("Time's up!");
+    submitTest();
   }
 }, 1000);
 
-// 🎤 RECORDING
-let mediaRecorder;
-let audioChunks = [];
-
-async function startRecording() {
-  try {
-    let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
-
-    audioChunks = [];
-
-    mediaRecorder.ondataavailable = event => {
-      audioChunks.push(event.data);
-    };
-
-    mediaRecorder.onstop = () => {
-      let audioBlob = new Blob(audioChunks);
-      let audioUrl = URL.createObjectURL(audioBlob);
-      document.getElementById("audio").src = audioUrl;
-    };
-
-    mediaRecorder.start();
-    alert("Recording started 🎤");
-
-  } catch (err) {
-    alert("Microphone access denied ❌");
+const questions = [
+  {
+    q: "Choose the correct word: She ___ going to school.",
+    options: ["is", "are", "am"],
+    answer: "is"
+  },
+  {
+    q: "Select synonym of 'Happy'",
+    options: ["Sad", "Joyful", "Angry"],
+    answer: "Joyful"
+  },
+  {
+    q: "Fill blank: He ___ finished his work.",
+    options: ["have", "has", "had"],
+    answer: "has"
   }
+];
+
+function loadQuiz() {
+  let quizHTML = "";
+  questions.forEach((q, index) => {
+    quizHTML += `<div class="question">
+      <h3>${q.q}</h3>
+      ${q.options.map(opt => `
+        <label>
+          <input type="radio" name="q${index}" value="${opt}">
+          ${opt}
+        </label><br>
+      `).join("")}
+    </div>`;
+  });
+  document.getElementById("quiz").innerHTML = quizHTML;
 }
 
-function stopRecording() {
-  if (mediaRecorder) {
-    mediaRecorder.stop();
-    alert("Recording stopped ▶️");
-  }
+function submitTest() {
+  clearInterval(timer);
+  let score = 0;
+
+  questions.forEach((q, index) => {
+    let answer = document.querySelector(`input[name="q${index}"]:checked`);
+    if (answer && answer.value === q.answer) {
+      score++;
+    }
+  });
+
+  document.getElementById("result").innerText =
+    "Your Score: " + score + "/" + questions.length;
 }
 
-// START
-loadQuestion();
+loadQuiz();
 </script>
 
 </body>
