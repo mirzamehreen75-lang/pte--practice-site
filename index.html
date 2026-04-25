@@ -1,61 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>PTE Practice</title>
+  <title>PTE Practice Pro</title>
   <style>
-    body { 
-      font-family: Arial; 
-      text-align: center; 
-      background: #f5f5f5; 
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background: #f4f4f4;
+      text-align: center;
     }
-    .box { 
-      background: white; 
-      padding: 20px; 
-      margin: 20px; 
-      border-radius: 10px; 
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      width: 60%;
+      border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    button { 
-      padding: 10px 20px; 
-      margin: 5px; 
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
       cursor: pointer;
     }
   </style>
 </head>
-
 <body>
 
 <h1>PTE Mock Test Practice</h1>
 
-<div class="box">
-  <h3>Read Aloud</h3>
+<div class="card">
+  <h2>⏱ Timer: <span id="timer">60</span> sec</h2>
+</div>
+
+<div class="card">
+  <h2>Read Aloud</h2>
   <p>Technology is transforming the world at a rapid pace.</p>
-  <button onclick="startRecording()">Start Speaking</button>
+  <button onclick="startSpeaking()">Start Speaking</button>
 </div>
 
-<div class="box">
-  <h3>Multiple Choice</h3>
-  <p>Choose the correct synonym of "rapid":</p>
-  <button onclick="check(true)">Fast</button>
-  <button onclick="check(false)">Slow</button>
+<div class="card">
+  <h2>Multiple Choice</h2>
+  <p>Choose synonym of "rapid"</p>
+  <button onclick="checkAnswer(true)">Fast</button>
+  <button onclick="checkAnswer(false)">Slow</button>
 </div>
 
-<h2 id="result"></h2>
+<div class="card">
+  <h2>Score: <span id="score">0</span></h2>
+</div>
 
 <script>
 let score = 0;
 
-function check(correct) {
-  if(correct){
-    score++;
-    document.getElementById("result").innerText = "Correct! Score: " + score;
-  } else {
-    document.getElementById("result").innerText = "Wrong! Score: " + score;
+let timeLeft = 60;
+let timer = setInterval(() => {
+  timeLeft--;
+  document.getElementById("timer").innerText = timeLeft;
+  if (timeLeft <= 0) {
+    clearInterval(timer);
+    alert("Time's up!");
   }
+}, 1000);
+
+function startSpeaking() {
+  alert("Recording started (demo only)");
+  score += 1;
+  updateScore();
 }
 
-function startRecording() {
-  alert("🎤 Recording feature coming soon!");
+function checkAnswer(correct) {
+  if (correct) {
+    alert("Correct!");
+    score += 1;
+  } else {
+    alert("Wrong!");
+  }
+  updateScore();
+}
+
+function updateScore() {
+  document.getElementById("score").innerText = score;
 }
 </script>
 
