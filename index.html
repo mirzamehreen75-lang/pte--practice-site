@@ -19,7 +19,7 @@
     }
     button {
       padding: 10px 20px;
-      margin-top: 10px;
+      margin: 10px;
       cursor: pointer;
     }
   </style>
@@ -49,38 +49,6 @@
   <h2>Score: <span id="score">0</span></h2>
 </div>
 
-<script>
-let score = 0;
-
-let timeLeft = 60;
-let timer = setInterval(() => {
-  timeLeft--;
-  document.getElementById("timer").innerText = timeLeft;
-  if (timeLeft <= 0) {
-    clearInterval(timer);
-    alert("Time's up!");
-  }
-}, 1000);
-
-function startSpeaking() {
-  alert("Recording started (demo only)");
-  score += 1;
-  updateScore();
-}
-
-function checkAnswer(correct) {
-  if (correct) {
-    alert("Correct!");
-    score += 1;
-  } else {
-    alert("Wrong!");
-  }
-  updateScore();
-}
-
-function updateScore() {
-  document.getElementById("score").innerText = score;
-}
 <script>
 let score = 0;
 
@@ -119,8 +87,10 @@ function answer(i) {
   } else {
     alert("Wrong!");
   }
+
   updateScore();
   current++;
+
   if (current < questions.length) {
     loadQuestion();
   } else {
@@ -128,7 +98,7 @@ function answer(i) {
   }
 }
 
-// Score update
+// Update score
 function updateScore() {
   document.getElementById("score").innerText = score;
 }
@@ -138,20 +108,21 @@ let timeLeft = 60;
 let timer = setInterval(() => {
   timeLeft--;
   document.getElementById("timer").innerText = timeLeft;
+
   if (timeLeft <= 0) {
     clearInterval(timer);
     alert("Time's up!");
   }
 }, 1000);
 
-// Speaking
+// Speaking (demo)
 function startSpeaking() {
   alert("Recording started (demo)");
   score++;
   updateScore();
 }
 
-// Load first question
+// Start first question
 loadQuestion();
 </script>
 
