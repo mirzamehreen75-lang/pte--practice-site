@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PTE Practice</title>
+  <style>
+    body { 
+      font-family: Arial; 
+      text-align: center; 
+      background: #f5f5f5; 
+    }
+    .box { 
+      background: white; 
+      padding: 20px; 
+      margin: 20px; 
+      border-radius: 10px; 
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    button { 
+      padding: 10px 20px; 
+      margin: 5px; 
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>PTE Mock Test Practice</h1>
+
+<div class="box">
+  <h3>Read Aloud</h3>
+  <p>Technology is transforming the world at a rapid pace.</p>
+  <button onclick="startRecording()">Start Speaking</button>
+</div>
+
+<div class="box">
+  <h3>Multiple Choice</h3>
+  <p>Choose the correct synonym of "rapid":</p>
+  <button onclick="check(true)">Fast</button>
+  <button onclick="check(false)">Slow</button>
+</div>
+
+<h2 id="result"></h2>
+
+<script>
+let score = 0;
+
+function check(correct) {
+  if(correct){
+    score++;
+    document.getElementById("result").innerText = "Correct! Score: " + score;
+  } else {
+    document.getElementById("result").innerText = "Wrong! Score: " + score;
+  }
+}
+
+function startRecording() {
+  alert("🎤 Recording feature coming soon!");
+}
+</script>
+
+</body>
+</html>
