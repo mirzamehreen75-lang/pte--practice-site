@@ -35,7 +35,9 @@
 <div class="card">
   <h2>Read Aloud</h2>
   <p>Technology is transforming the world at a rapid pace.</p>
-  <button onclick="startSpeaking()">Start Speaking</button>
+  <button onclick="startRecording()">Start Recording</button>
+<button onclick="stopRecording()">Stop</button>
+<audio id="audio" controls></audio>
 </div>
 
 <div class="card">
@@ -124,7 +126,34 @@ function startSpeaking() {
 
 // Start first question
 loadQuestion();
-</script>
+let mediaRecorder;
+let audioChunks = [];
+
+async function startRecording() {
+  let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  mediaRecorder = new MediaRecorder(stream);
+
+  mediaRecorder.start();
+  audioChunks = [];
+
+  mediaRecorder.ondataavailable = event => {
+    audioChunks.push(event.data);
+  };
+
+  alert("Recording started 🎤");
+}
+
+function stopRecording() {
+  mediaRecorder.stop();
+
+  mediaRecorder.onstop = () => {
+    let audioBlob = new Blob(audioChunks);
+    let audioUrl = URL.createObjectURL(audioBlob);
+    document.getElementById("audio").src = audioUrl;
+
+    alert("Recording stopped ▶️");
+  };
+}
 
 </body>
 </html>
