@@ -40,9 +40,9 @@
 
 <div class="card">
   <h2>Multiple Choice</h2>
-  <p>Choose synonym of "rapid"</p>
-  <button onclick="checkAnswer(true)">Fast</button>
-  <button onclick="checkAnswer(false)">Slow</button>
+  <p id="question"></p>
+  <button onclick="answer(0)" id="opt0"></button>
+  <button onclick="answer(1)" id="opt1"></button>
 </div>
 
 <div class="card">
@@ -81,6 +81,78 @@ function checkAnswer(correct) {
 function updateScore() {
   document.getElementById("score").innerText = score;
 }
+<script>
+let score = 0;
+
+let questions = [
+  {
+    q: "Choose synonym of 'rapid'",
+    options: ["Fast", "Slow"],
+    correct: 0
+  },
+  {
+    q: "Choose synonym of 'happy'",
+    options: ["Sad", "Joyful"],
+    correct: 1
+  },
+  {
+    q: "Choose synonym of 'big'",
+    options: ["Large", "Tiny"],
+    correct: 0
+  }
+];
+
+let current = 0;
+
+// Load question
+function loadQuestion() {
+  document.getElementById("question").innerText = questions[current].q;
+  document.getElementById("opt0").innerText = questions[current].options[0];
+  document.getElementById("opt1").innerText = questions[current].options[1];
+}
+
+// Answer
+function answer(i) {
+  if (i === questions[current].correct) {
+    alert("Correct!");
+    score++;
+  } else {
+    alert("Wrong!");
+  }
+  updateScore();
+  current++;
+  if (current < questions.length) {
+    loadQuestion();
+  } else {
+    alert("Test finished!");
+  }
+}
+
+// Score update
+function updateScore() {
+  document.getElementById("score").innerText = score;
+}
+
+// Timer
+let timeLeft = 60;
+let timer = setInterval(() => {
+  timeLeft--;
+  document.getElementById("timer").innerText = timeLeft;
+  if (timeLeft <= 0) {
+    clearInterval(timer);
+    alert("Time's up!");
+  }
+}, 1000);
+
+// Speaking
+function startSpeaking() {
+  alert("Recording started (demo)");
+  score++;
+  updateScore();
+}
+
+// Load first question
+loadQuestion();
 </script>
 
 </body>
